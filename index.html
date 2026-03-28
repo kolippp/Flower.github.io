@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Luxury Performer Portfolio</title>
+    <meta name="description" content="Luxury portfolio for dancer, contortionist and aerialist." />
+    <style>
+    :root{
+      --bg:#080809;
+      --panel:rgba(18,18,21,0.72);
+      --panel2:rgba(255,255,255,0.04);
+      --line:rgba(255,255,255,0.10);
+      --line2:rgba(255,255,255,0.06);
+      --text:#f7f1e8;
+      --muted:#c2b8a8;
+      --gold:#d6b06b;
+      --gold2:#a87d35;
+      --ivory:#ece3d6;
+      --shadow:0 30px 80px rgba(0,0,0,0.48);
+      --radius:26px;
+      --max:1240px;
+      --transition:0.35s ease;
+    }
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    html{
+      scroll-behavior:smooth;
+    }
+
+    body{
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(214,176,107,0.08), transparent 26%),
+        radial-gradient(circle at bottom right, rgba(214,176,107,0.05), transparent 22%),
+        var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
+    }
+
+    body.loading{
+      overflow:hidden;
+    }
+
+    a{
+      color:inherit;
+      text-decoration:none;
+    }
+
+    img, video{
+      display:block;
+      width:100%;
+    }
+
+    .container{
+      width:min(var(--max), calc(100% - 28px));
+      margin:0 auto;
+    }
+
+    /* LOADING SCREEN */
+
+    .loader{
+      position:fixed;
+      inset:0;
+      z-index:300;
+      background:
+        radial-gradient(circle at center, rgba(214,176,107,0.10), transparent 28%),
+        linear-gradient(180deg, #09090b, #050506);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition:opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    .loader.hidden{
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+    }
+
+    .loader-inner{
+      text-align:center;
+      display:grid;
+      gap:18px;
+    }
+
+    .loader-mark{
+      width:86px;
+      height:86px;
+      margin:0 auto;
+      border-radius:50%;
+      border:1px solid rgba(214,176,107,0.35);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:var(--gold);
+      font-size:22px;
+      letter-spacing:0.18em;
+      box-shadow:
+        0 0 0 10px rgba(214,176,107,0.04),
+        0 0 50px rgba(214,176,107,0.12);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .loader-mark::before{
+      content:"";
+      position:absolute;
+      inset:-20%;
+      border-radius:50%;
+      border:2px solid transparent;
+      border-top-color:rgba(214,176,107,0.9);
+      border-right-color:rgba(214,176,107,0.35);
+      animation:spin 1.4s linear infinite;
+    }
+
+    .loader-text{
+      color:var(--ivory);
+      text-transform:uppercase;
+      letter-spacing:0.28em;
+      font-size:12px;
+    }
+
+    .loader-line{
+      width:180px;
+      height:2px;
+      margin:0 auto;
+      background:rgba(255,255,255,0.08);
+      overflow:hidden;
+      position:relative;
+      border-radius:999px;
+    }
+
+    .loader-line::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      width:40%;
+      background:linear-gradient(90deg, transparent, var(--gold), transparent);
+      animation:lineMove 1.6s ease-in-out infinite;
+    }
+
+    @keyframes spin{
+      to{ transform:rotate(360deg); }
+    }
+
+    @keyframes lineMove{
+      0%{ transform:translateX(-120%); }
+      100%{ transform:translateX(320%); }
+    }
+
+    /* TOPBAR */
+
+    .topbar{
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      z-index:100;
+      background:rgba(8,8,9,0.58);
+      backdrop-filter:blur(16px);
+      border-bottom:1px solid var(--line2);
+    }
+
+    .topbar-inner{
+      min-height:78px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      text-transform:uppercase;
+      letter-spacing:0.18em;
+      font-size:12px;
+      color:var(--ivory);
+    }
+
+    .brand-mark{
+      width:38px;
+      height:38px;
+      border-radius:50%;
+      border:1px solid rgba(214,176,107,0.45);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:var(--gold);
+      font-size:12px;
+    }
+
+    .menu-button{
+      width:62px;
+      height:62px;
+      background:transparent;
+      border:none;
+      border-left:1px solid var(--line2);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+    }
+
+    .burger{
+      width:28px;
+      height:20px;
+      position:relative;
+    }
+
+    .burger span{
+      position:absolute;
+      left:0;
+      width:100%;
+      height:3px;
+      background:var(--ivory);
+      transition:var(--transition);
+    }
+
+    .burger span:nth-child(1){ top:0; }
+    .burger span:nth-child(2){ top:8px; }
+    .burger span:nth-child(3){ top:16px; }
+
+    .menu-open .burger span:nth-child(1){
+      transform:translateY(8px) rotate(45deg);
+    }
+    .menu-open .burger span:nth-child(2){
+      opacity:0;
+    }
+    .menu-open .burger span:nth-child(3){
+      transform:translateY(-8px) rotate(-45deg);
+    }
+
+    .menu-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.45);
+      opacity:0;
+      pointer-events:none;
+      transition:var(--transition);
+      z-index:98;
+    }
+
+    .menu-overlay.active{
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .side-menu{
+      position:fixed;
+      top:0;
+      right:0;
+      width:min(520px, 88vw);
+      height:100vh;
+      background:
+        radial-gradient(circle at top, rgba(214,176,107,0.07), transparent 35%),
+        linear-gradient(180deg, #111114, #09090b);
+      border-left:1px solid var(--line);
+      transform:translateX(100%);
+      transition:transform 0.45s ease;
+      z-index:99;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      box-shadow:-30px 0 80px rgba(0,0,0,0.42);
+    }
+
+    .side-menu.active{
+      transform:translateX(0);
+    }
+
+    .menu-header{
+      padding-top:78px;
+      border-bottom:1px solid var(--line2);
+    }
+
+    .menu-list{
+      list-style:none;
+    }
+
+    .menu-list a{
+      min-height:100px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-bottom:1px solid var(--line2);
+      text-transform:uppercase;
+      letter-spacing:0.14em;
+      font-size:clamp(22px, 3.5vw, 38px);
+      color:var(--ivory);
+      position:relative;
+      overflow:hidden;
+      transition:var(--transition);
+    }
+
+    .menu-list a::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(90deg, transparent, rgba(214,176,107,0.12), transparent);
+      transform:translateX(-100%);
+      transition:0.5s ease;
+    }
+
+    .menu-list a:hover{
+      color:var(--gold);
+      letter-spacing:0.17em;
+      background:rgba(255,255,255,0.02);
+    }
+
+    .menu-list a:hover::before{
+      transform:translateX(100%);
+    }
+
+    .menu-footer{
+      padding:28px;
+      display:grid;
+      gap:14px;
+      border-top:1px solid var(--line2);
+    }
+
+    .menu-footer p{
+      color:var(--muted);
+      line-height:1.7;
+    }
+
+    .menu-socials{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .menu-socials a{
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(214,176,107,0.24);
+      color:var(--muted);
+      font-size:13px;
+      transition:var(--transition);
+      background:rgba(255,255,255,0.02);
+    }
+
+    .menu-socials a:hover{
+      color:var(--gold);
+      border-color:var(--gold);
+      box-shadow:0 0 24px rgba(214,176,107,0.08);
+    }
+
+    /* HERO */
+
+    .hero{
+      min-height:100vh;
+      position:relative;
+      display:flex;
+      align-items:flex-end;
+      padding:120px 0 52px;
+      overflow:hidden;
+    }
+
+    .hero-video{
+      position:absolute;
+      inset:0;
+      z-index:-3;
+      overflow:hidden;
+    }
+
+    .hero-video video{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      filter:brightness(0.45) saturate(1.05);
+      transform:scale(1.03);
+    }
+
+    .hero-overlay{
+      position:absolute;
+      inset:0;
+      z-index:-2;
+      background:
+        linear-gradient(to top, rgba(8,8,9,0.94) 0%, rgba(8,8,9,0.50) 45%, rgba(8,8,9,0.30) 100%),
+        radial-gradient(circle at center, transparent 0%, rgba(8,8,9,0.3) 65%, rgba(8,8,9,0.7) 100%);
+    }
+
+    .hero-shine{
+      position:absolute;
+      inset:0;
+      z-index:-1;
+      background:linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.02) 36%, rgba(214,176,107,0.12) 50%, rgba(255,255,255,0.02) 64%, transparent 100%);
+      animation:shineMove 10s linear infinite;
+      mix-blend-mode:screen;
+    }
+
+    @keyframes shineMove{
+      0%{ transform:translateX(-100%); }
+      100%{ transform:translateX(100%); }
+    }
+
+    .hero-content{
+      max-width:940px;
+    }
+
+    .eyebrow{
+      display:inline-block;
+      padding:10px 16px;
+      border:1px solid rgba(214,176,107,0.35);
+      border-radius:999px;
+      color:var(--gold);
+      background:rgba(0,0,0,0.18);
+      backdrop-filter:blur(8px);
+      font-size:12px;
+      letter-spacing:0.18em;
+      text-transform:uppercase;
+      margin-bottom:18px;
+      box-shadow:0 0 24px rgba(214,176,107,0.05);
+    }
+
+    .hero h1{
+      font-size:clamp(46px, 9vw, 110px);
+      line-height:0.92;
+      text-transform:uppercase;
+      letter-spacing:0.03em;
+      color:#f7f2e9;
+      margin-bottom:20px;
+      text-shadow:0 14px 34px rgba(0,0,0,0.35);
+    }
+
+    .hero h1 span{
+      color:var(--gold);
+      font-style:italic;
+      font-weight:300;
+    }
+
+    .hero p{
+      max-width:700px;
+      color:#ddd4c6;
+      line-height:1.85;
+      font-size:17px;
+      margin-bottom:30px;
+    }
+
+    .hero-buttons{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-bottom:28px;
+    }
+
+    .btn{
+      min-height:54px;
+      padding:0 22px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:999px;
+      font-size:12px;
+      letter-spacing:0.10em;
+      text-transform:uppercase;
+      transition:var(--transition);
+    }
+
+    .btn-gold{
+      background:linear-gradient(135deg, #e2c487, #b4873f);
+      color:#111;
+      font-weight:700;
+      box-shadow:0 12px 30px rgba(214,176,107,0.26);
+    }
+
+    .btn-gold:hover{
+      transform:translateY(-2px);
+      box-shadow:0 14px 38px rgba(214,176,107,0.30);
+    }
+
+    .btn-line{
+      border:1px solid rgba(255,255,255,0.22);
+      background:rgba(255,255,255,0.03);
+      color:var(--ivory);
+    }
+
+    .btn-line:hover{
+      border-color:var(--gold);
+      color:var(--gold);
+      box-shadow:0 0 24px rgba(214,176,107,0.06);
+    }
+
+    .hero-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px;
+    }
+
+    .meta-card{
+      min-width:145px;
+      padding:16px 18px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:rgba(18,18,21,0.45);
+      backdrop-filter:blur(10px);
+      box-shadow:var(--shadow);
+    }
+
+    .meta-card strong{
+      display:block;
+      font-size:22px;
+      color:var(--gold);
+      margin-bottom:4px;
+    }
+
+    .meta-card span{
+      color:var(--muted);
+      font-size:13px;
+      text-transform:uppercase;
+      letter-spacing:0.06em;
+    }
+
+    /* GENERAL SECTION */
+
+    .section{
+      padding:90px 0;
+    }
+
+    .section-head{
+      margin-bottom:30px;
+    }
+
+    .section-kicker{
+      color:var(--gold);
+      text-transform:uppercase;
+      letter-spacing:0.18em;
+      font-size:12px;
+      margin-bottom:10px;
+    }
+
+    .section-title{
+      font-size:clamp(34px, 5vw, 62px);
+      line-height:1;
+      text-transform:uppercase;
+      color:#f2ede3;
+      margin-bottom:14px;
+    }
+
+    .section-text{
+      max-width:760px;
+      color:var(--muted);
+      line-height:1.85;
+      font-size:16px;
+    }
+
+    .glass{
+      background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+      border:1px solid var(--line2);
+      backdrop-filter:blur(10px);
+      box-shadow:var(--shadow);
+    }
+
+    /* ABOUT */
+
+    .about-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:22px;
+    }
+
+    .about-card{
+      border-radius:24px;
+      padding:26px;
+    }
+
+    .about-card h3{
+      font-size:24px;
+      text-transform:uppercase;
+      letter-spacing:0.05em;
+      margin-bottom:12px;
+    }
+
+    .about-card p{
+      color:var(--muted);
+      line-height:1.85;
+      margin-bottom:18px;
+    }
+
+    .tag-list{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .tag{
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(214,176,107,0.23);
+      color:#e7dcc9;
+      font-size:13px;
+      letter-spacing:0.05em;
+      background:rgba(255,255,255,0.02);
+    }
+
+    /* FEATURED */
+
+    .featured-grid{
+      display:grid;
+      grid-template-columns:1.08fr 0.92fr;
+      gap:22px;
+    }
+
+    .featured-main,
+    .featured-side{
+      border-radius:28px;
+      overflow:hidden;
+      position:relative;
+      min-height:620px;
+    }
+
+    .featured-main img,
+    .featured-side img{
+      height:100%;
+      object-fit:cover;
+    }
+
+    .featured-overlay{
+      position:absolute;
+      inset:auto 0 0 0;
+      padding:28px;
+      background:linear-gradient(to top, rgba(0,0,0,0.82), rgba(0,0,0,0.05));
+    }
+
+    .featured-overlay h3{
+      font-size:32px;
+      text-transform:uppercase;
+      letter-spacing:0.06em;
+      margin-bottom:10px;
+      color:#fff8ed;
+    }
+
+    .featured-overlay p{
+      color:#d6ccbd;
+      line-height:1.8;
+      max-width:520px;
+    }
+
+    /* GALLERY */
+
+    .gallery-grid{
+      display:grid;
+      grid-template-columns:repeat(12, 1fr);
+      gap:18px;
+    }
+
+    .gallery-card{
+      position:relative;
+      overflow:hidden;
+      border-radius:24px;
+      min-height:300px;
+      cursor:pointer;
+      transition:transform var(--transition), box-shadow var(--transition);
+    }
+
+    .gallery-card:hover{
+      transform:translateY(-6px);
+      box-shadow:0 30px 70px rgba(0,0,0,0.35);
+    }
+
+    .gallery-card img{
+      height:100%;
+      object-fit:cover;
+      transition:transform 0.5s ease;
+    }
+
+    .gallery-card:hover img{
+      transform:scale(1.05);
+    }
+
+    .gallery-card::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(to top, rgba(0,0,0,0.82), rgba(0,0,0,0.08));
+    }
+
+    .gallery-info{
+      position:absolute;
+      left:18px;
+      right:18px;
+      bottom:18px;
+      z-index:2;
+    }
+
+    .gallery-info h4{
+      font-size:22px;
+      text-transform:uppercase;
+      letter-spacing:0.06em;
+      margin-bottom:6px;
+      color:#fff8ed;
+    }
+
+    .gallery-info p{
+      color:#d6ccba;
+      font-size:14px;
+      line-height:1.6;
+    }
+
+    .span-7{ grid-column:span 7; }
+    .span-5{ grid-column:span 5; }
+    .span-4{ grid-column:span 4; }
+    .span-8{ grid-column:span 8; }
+
+    /* VIDEOS */
+
+    .videos-grid{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:18px;
+    }
+
+    .video-card{
+      border-radius:24px;
+      overflow:hidden;
+    }
+
+    .video-wrap{
+      position:relative;
+      aspect-ratio:9 / 16;
+      background:#000;
+    }
+
+    .video-wrap video{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      background:#000;
+    }
+
+    .video-label{
+      padding:16px 18px;
+      border-top:1px solid var(--line2);
+      background:rgba(255,255,255,0.02);
+    }
+
+    .video-label h4{
+      text-transform:uppercase;
+      letter-spacing:0.06em;
+      font-size:17px;
+      margin-bottom:6px;
+      color:#fff8ed;
+    }
+
+    .video-label p{
+      color:var(--muted);
+      line-height:1.7;
+      font-size:14px;
+    }
+
+    /* ACTS */
+
+    .acts-grid{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:18px;
+    }
+
+    .act-card{
+      border-radius:24px;
+      padding:24px;
+    }
+
+    .act-number{
+      color:var(--gold);
+      text-transform:uppercase;
+      letter-spacing:0.18em;
+      font-size:12px;
+      margin-bottom:14px;
+    }
+
+    .act-card h3{
+      font-size:24px;
+      text-transform:uppercase;
+      letter-spacing:0.05em;
+      margin-bottom:10px;
+    }
+
+    .act-card p{
+      color:var(--muted);
+      line-height:1.8;
+      margin-bottom:16px;
+    }
+
+    .act-card ul{
+      list-style:none;
+      display:grid;
+      gap:10px;
+    }
+
+    .act-card li{
+      color:#e7dcc9;
+      padding-left:18px;
+      position:relative;
+      line-height:1.6;
+    }
+
+    .act-card li::before{
+      content:"•";
+      position:absolute;
+      left:0;
+      color:var(--gold);
+    }
+
+    /* CONTACT */
+
+    .contact-wrap{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:22px;
+    }
+
+    .contact-card{
+      border-radius:28px;
+      padding:28px;
+    }
+
+    .contact-card h3{
+      font-size:28px;
+      text-transform:uppercase;
+      letter-spacing:0.06em;
+      margin-bottom:12px;
+    }
+
+    .contact-card p{
+      color:var(--muted);
+      line-height:1.8;
+      margin-bottom:18px;
+    }
+
+    .contact-links{
+      display:grid;
+      gap:12px;
+    }
+
+    .contact-link{
+      padding:16px 18px;
+      border-radius:18px;
+      border:1px solid var(--line2);
+      background:rgba(255,255,255,0.02);
+      transition:var(--transition);
+    }
+
+    .contact-link:hover{
+      border-color:rgba(214,176,107,0.42);
+      color:var(--gold);
+      box-shadow:0 0 24px rgba(214,176,107,0.06);
+    }
+
+    .form{
+      display:grid;
+      gap:12px;
+    }
+
+    .field{
+      width:100%;
+      padding:15px 16px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,0.10);
+      background:rgba(255,255,255,0.03);
+      color:#f6f1e8;
+      font:inherit;
+      outline:none;
+    }
+
+    .field::placeholder{
+      color:#aaa293;
+    }
+
+    textarea.field{
+      min-height:140px;
+      resize:vertical;
+    }
+
+    /* FOOTER */
+
+    footer{
+      padding:30px 0 46px;
+      border-top:1px solid var(--line2);
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .footer-inner{
+      display:flex;
+      justify-content:space-between;
+      gap:20px;
+      flex-wrap:wrap;
+    }
+
+    /* LIGHTBOX */
+
+    .lightbox{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.84);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      opacity:0;
+      pointer-events:none;
+      transition:var(--transition);
+      z-index:120;
+      backdrop-filter:blur(10px);
+    }
+
+    .lightbox.open{
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .lightbox-inner{
+      position:relative;
+      width:min(980px, 100%);
+      max-height:90vh;
+      border-radius:24px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.12);
+      background:#0b0b0d;
+    }
+
+    .lightbox img{
+      max-height:90vh;
+      object-fit:contain;
+      background:#0b0b0d;
+    }
+
+    .lightbox-close{
+      position:absolute;
+      top:14px;
+      right:14px;
+      width:44px;
+      height:44px;
+      border:none;
+      border-radius:50%;
+      background:rgba(255,255,255,0.12);
+      color:white;
+      font-size:24px;
+      cursor:pointer;
+    }
+
+    /* REVEAL */
+
+    .reveal{
+      opacity:0;
+      transform:translateY(26px);
+      transition:0.8s ease;
+    }
+
+    .reveal.visible{
+      opacity:1;
+      transform:translateY(0);
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 980px){
+      .about-grid,
+      .featured-grid,
+      .acts-grid,
+      .contact-wrap,
+      .videos-grid{
+        grid-template-columns:1fr;
+      }
+
+      .gallery-grid{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .span-7,.span-5,.span-4,.span-8{
+        grid-column:span 1;
+      }
+
+      .featured-main,
+      .featured-side{
+        min-height:430px;
+      }
+
+      .video-wrap{
+        aspect-ratio:16 / 9;
+      }
+    }
+
+    @media (max-width: 640px){
+      .hero{
+        min-height:88vh;
+      }
+
+      .menu-list a{
+        min-height:90px;
+        font-size:27px;
+      }
+
+      .gallery-grid{
+        grid-template-columns:1fr;
+      }
+
+      .topbar-inner{
+        min-height:72px;
+      }
+
+      .menu-button{
+        width:58px;
+        height:58px;
+      }
+
+      .loader-mark{
+        width:74px;
+        height:74px;
+        font-size:18px;
+      }
+    }
+  </style>
+  </head>
+  <body class="loading">
+    <div class="loader" id="loader">
+      <div class="loader-inner">
+        <div class="loader-mark">LV</div>
+        <div class="loader-text">Loading Portfolio</div>
+        <div class="loader-line"></div>
+      </div>
+    </div>
+    <div class="topbar">
+      <div class="container topbar-inner">
+        <a href="#home" class="brand">
+          <div class="brand-mark">LV</div>
+          <div>Luxury Performance</div>
+        </a>
+
+      <button class="menu-button" id="menuButton" aria-label="Open menu">
+        <div class="burger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <div class="menu-overlay" id="menuOverlay"></div>
+
+  <aside class="side-menu" id="sideMenu">
+    <div class="menu-header">
+      <ul class="menu-list">
+        <li><a href="#home" class="menu-link">Home</a></li>
+        <li><a href="#about" class="menu-link">About Me & CV</a></li>
+        <li><a href="#gallery" class="menu-link">Gallery</a></li>
+        <li><a href="#videos" class="menu-link">Videos</a></li>
+        <li><a href="#acts" class="menu-link">Acts</a></li>
+        <li><a href="#contact" class="menu-link">Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="menu-footer">
+      <p>
+        Dancer • Contortionist • Aerialist<br>
+        Luxury events • Gala • Cabaret • Private shows
+      </p>
+
+      <div class="menu-socials">
+        <a href="https://instagram.com/" target="_blank">Instagram</a>
+        <a href="https://tiktok.com/" target="_blank">TikTok</a>
+        <a href="https://facebook.com/" target="_blank">Facebook</a>
+      </div>
+    </div>
+  </aside>
+
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-inner">
+      <button class="lightbox-close" id="lightboxClose">×</button>
+      <img id="lightboxImage" src="" alt="Preview image">
+    </div>
+  </div>
+
+  <section class="hero" id="home">
+    <div class="hero-video">
+      <video autoplay muted loop playsinline>
+        <source src="bg.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-shine"></div>
+
+    <div class="container">
+      <div class="hero-content reveal">
+        <div class="eyebrow">Dancer • Contortionist • Aerialist</div>
+
+        <h1>
+          Luxury <span>Movement</span><br>
+          Performance
+        </h1>
+
+        <p>
+          High-end visual entertainment for luxury events, private celebrations,
+          gala dinners, cabaret nights, brand experiences and exclusive productions.
+          Elegant, powerful and unforgettable.
+        </p>
+
+        <div class="hero-buttons">
+          <a href="#gallery" class="btn btn-gold">View Portfolio</a>
+          <a href="#videos" class="btn btn-line">Watch Videos</a>
+          <a href="#contact" class="btn btn-line">Book Performance</a>
+        </div>
+
+        <div class="hero-meta">
+          <div class="meta-card">
+            <strong>3</strong>
+            <span>Specialties</span>
+          </div>
+          <div class="meta-card">
+            <strong>Luxury</strong>
+            <span>Visual Style</span>
+          </div>
+          <div class="meta-card">
+            <strong>Live</strong>
+            <span>Event Ready</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="about">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="section-kicker">About</div>
+        <h2 class="section-title">About Me & CV</h2>
+        <p class="section-text">
+          A premium portfolio for a multidisciplinary performer specializing in dance,
+          contortion and aerial arts. Designed to present elegance, flexibility, strength,
+          stage presence and a refined luxury image.
+        </p>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-card glass reveal">
+          <h3>Artist Profile</h3>
+          <p>
+            I create visually striking performances that combine fluid dance,
+            contortion technique and aerial artistry. My work is designed for refined events,
+            stylish venues and unforgettable atmosphere.
+          </p>
+
+          <div class="tag-list">
+            <span class="tag">Contortion</span>
+            <span class="tag">Aerial Hoop</span>
+            <span class="tag">Dance Performance</span>
+            <span class="tag">Luxury Events</span>
+            <span class="tag">Gala Shows</span>
+            <span class="tag">Private Bookings</span>
+          </div>
+        </div>
+
+        <div class="about-card glass reveal">
+          <h3>Available For</h3>
+          <p>
+            Available for upscale dinners, exclusive parties, corporate events,
+            weddings, brand launches, cabaret nights and private entertainment programs.
+          </p>
+
+          <div class="tag-list">
+            <span class="tag">Corporate Events</span>
+            <span class="tag">Cabaret</span>
+            <span class="tag">Nightlife Shows</span>
+            <span class="tag">Brand Events</span>
+            <span class="tag">Luxury Weddings</span>
+            <span class="tag">VIP Celebrations</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="featured-grid">
+        <div class="featured-main glass reveal">
+          <img src="stage.jpg" alt="Luxury contortion stage performance">
+          <div class="featured-overlay">
+            <h3>Signature Stage Presence</h3>
+            <p>
+              Bold silhouettes, dramatic lighting and sculptural poses designed for a premium audience experience.
+            </p>
+          </div>
+        </div>
+
+        <div class="featured-side glass reveal">
+          <img src="hoop.jpg" alt="Aerial hoop contortion act">
+          <div class="featured-overlay">
+            <h3>Aerial Elegance</h3>
+            <p>
+              Refined aerial visuals with strong lines, flexibility and luxury atmosphere.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="gallery">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="section-kicker">Portfolio</div>
+        <h2 class="section-title">Gallery</h2>
+        <p class="section-text">
+          Tap any image to open it fullscreen.
+        </p>
+      </div>
+
+      <div class="gallery-grid">
+        <div class="gallery-card glass span-7 reveal" data-image="hero.jpg">
+          <img src="hero.jpg" alt="Hero performance image">
+          <div class="gallery-info">
+            <h4>Blue Stage Atmosphere</h4>
+            <p>Elegant nightclub mood with dramatic luxury lighting.</p>
+          </div>
+        </div>
+
+        <div class="gallery-card glass span-5 reveal" data-image="hoop.jpg">
+          <img src="hoop.jpg" alt="Aerial hoop image">
+          <div class="gallery-info">
+            <h4>Aerial Hoop</h4>
+            <p>Clean lines, contortion shape and premium event styling.</p>
+          </div>
+        </div>
+
+        <div class="gallery-card glass span-4 reveal" data-image="studio.jpg">
+          <img src="studio.jpg" alt="Studio contortion portrait">
+          <div class="gallery-info">
+            <h4>Studio Portrait</h4>
+            <p>Minimal luxury image for press, CV and branding use.</p>
+          </div>
+        </div>
+
+        <div class="gallery-card glass span-8 reveal" data-image="stage.jpg">
+          <img src="stage.jpg" alt="Live stage contortion performance">
+          <div class="gallery-info">
+            <h4>Live Performance</h4>
+            <p>Powerful on-stage visual with premium costume and dramatic pose.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="videos">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="section-kicker">Showreel</div>
+        <h2 class="section-title">Portfolio Videos</h2>
+        <p class="section-text">
+          Put your best dancing, contortion and aerial videos here.
+          Vertical videos also work well for phone.
+        </p>
+      </div>
+
+      <div class="videos-grid">
+        <div class="video-card glass reveal">
+          <div class="video-wrap">
+            <video controls playsinline preload="metadata" poster="hero.jpg">
+              <source src="dance1.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="video-label">
+            <h4>Dance Showreel</h4>
+            <p>Main portfolio clip with strongest stage moments.</p>
+          </div>
+        </div>
+
+        <div class="video-card glass reveal">
+          <div class="video-wrap">
+            <video controls playsinline preload="metadata" poster="hoop.jpg">
+              <source src="dance2.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="video-label">
+            <h4>Aerial Performance</h4>
+            <p>Feature your hoop or aerial act for bookings.</p>
+          </div>
+        </div>
+
+        <div class="video-card glass reveal">
+          <div class="video-wrap">
+            <video controls playsinline preload="metadata" poster="stage.jpg">
+              <source src="dance3.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="video-label">
+            <h4>Live Event Clip</h4>
+            <p>Luxury venue atmosphere and audience reaction.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="acts">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="section-kicker">Performance</div>
+        <h2 class="section-title">Acts</h2>
+        <p class="section-text">
+          Present your strongest acts in a simple, elegant and professional way.
+        </p>
+      </div>
+
+      <div class="acts-grid">
+        <div class="act-card glass reveal">
+          <div class="act-number">Act 01</div>
+          <h3>Contortion Solo</h3>
+          <p>
+            A visually intense solo act featuring deep flexibility, sculptural lines
+            and refined stage energy.
+          </p>
+          <ul>
+            <li>Luxury event ready</li>
+            <li>Stage or platform performance</li>
+            <li>Strong visual costume styling</li>
+          </ul>
+        </div>
+
+        <div class="act-card glass reveal">
+          <div class="act-number">Act 02</div>
+          <h3>Aerial Hoop</h3>
+          <p>
+            Elegant aerial performance designed for premium spaces, gala dinners
+            and exclusive nightlife productions.
+          </p>
+          <ul>
+            <li>Perfect for feature moment</li>
+            <li>High visual impact</li>
+            <li>Modern luxury aesthetic</li>
+          </ul>
+        </div>
+
+        <div class="act-card glass reveal">
+          <div class="act-number">Act 03</div>
+          <h3>Custom Show</h3>
+          <p>
+            Tailored performance concept adapted to your venue, event atmosphere,
+            soundtrack and theme.
+          </p>
+          <ul>
+            <li>Private events</li>
+            <li>Luxury celebrations</li>
+            <li>Brand activations</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="contact">
+    <div class="container">
+      <div class="contact-wrap">
+        <div class="contact-card glass reveal">
+          <h3>Booking & Social Media</h3>
+          <p>Replace these links with the real ones.</p>
+
+          <div class="contact-links">
+            <a class="contact-link" href="mailto:your@email.com">Email — your@email.com</a>
+            <a class="contact-link" href="https://instagram.com/" target="_blank">Instagram</a>
+            <a class="contact-link" href="https://tiktok.com/" target="_blank">TikTok</a>
+            <a class="contact-link" href="https://facebook.com/" target="_blank">Facebook</a>
+          </div>
+        </div>
+
+        <div class="contact-card glass reveal">
+          <h3>Booking Request</h3>
+          <p>This form is visual for now. Later you can connect it to Formspree.</p>
+
+          <form class="form" onsubmit="event.preventDefault(); alert('Form submitted. Replace with your real booking form later.');">
+            <input class="field" type="text" placeholder="Your name" required>
+            <input class="field" type="email" placeholder="Your email" required>
+            <input class="field" type="text" placeholder="Event / venue">
+            <textarea class="field" placeholder="Tell me about your event"></textarea>
+            <button class="btn btn-gold" type="submit">Send Request</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container footer-inner">
+      <div>© 2026 Luxury Performer Portfolio</div>
+      <div>Dancer • Contortionist • Aerialist</div>
+    </div>
+  </footer>
+
+  <script>
+    const loader = document.getElementById("loader");
+    const body = document.body;
+
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        loader.classList.add("hidden");
+        body.classList.remove("loading");
+      }, 1200);
+    });
+
+    const menuButton = document.getElementById("menuButton");
+    const sideMenu = document.getElementById("sideMenu");
+    const menuOverlay = document.getElementById("menuOverlay");
+    const menuLinks = document.querySelectorAll(".menu-link");
+
+    function openMenu(){
+      sideMenu.classList.add("active");
+      menuOverlay.classList.add("active");
+      body.classList.add("menu-open");
+    }
+
+    function closeMenu(){
+      sideMenu.classList.remove("active");
+      menuOverlay.classList.remove("active");
+      body.classList.remove("menu-open");
+    }
+
+    menuButton.addEventListener("click", () => {
+      if(sideMenu.classList.contains("active")){
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    });
+
+    menuOverlay.addEventListener("click", closeMenu);
+    menuLinks.forEach(link => link.addEventListener("click", closeMenu));
+
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "Escape") closeMenu();
+    });
+
+    const galleryCards = document.querySelectorAll(".gallery-card");
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImage = document.getElementById("lightboxImage");
+    const lightboxClose = document.getElementById("lightboxClose");
+
+    galleryCards.forEach(card => {
+      card.addEventListener("click", () => {
+        const src = card.getAttribute("data-image");
+        lightboxImage.src = src;
+        lightbox.classList.add("open");
+      });
+    });
+
+    lightboxClose.addEventListener("click", () => {
+      lightbox.classList.remove("open");
+      lightboxImage.src = "";
+    });
+
+    lightbox.addEventListener("click", (e) => {
+      if(e.target === lightbox){
+        lightbox.classList.remove("open");
+        lightboxImage.src = "";
+      }
+    });
+
+    const reveals = document.querySelectorAll(".reveal");
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add("visible");
+        }
+      });
+    }, { threshold: 0.12 });
+
+    reveals.forEach(item => observer.observe(item));
+  </script>
+</body>
+</html>
