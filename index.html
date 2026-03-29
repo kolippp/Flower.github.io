@@ -2,9 +2,12 @@
 
 <html lang="en">
   <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Flower</title>
+    <title>Lola Grace</title>
     <meta name="description" content="Portfolio for dancer, contortionist and aerialist." />
     <style>
     :root{
@@ -35,7 +38,9 @@
     }
 
     body{
-      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-family: "Inter", Arial, sans-serif;
+      font-weight:400;
+      letter-spacing:0.01em;
       background:
         radial-gradient(circle at top left, rgba(214,176,107,0.08), transparent 26%),
         radial-gradient(circle at bottom right, rgba(214,176,107,0.05), transparent 22%),
@@ -183,6 +188,7 @@
       text-transform:uppercase;
       letter-spacing:0.18em;
       font-size:12px;
+      fonr-weight:500;
       color:var(--ivory);
     }
 
@@ -196,6 +202,9 @@
       justify-content:center;
       color:var(--gold);
       font-size:12px;
+      font-family:"Inter:, sant-serif;
+      font-weight:600;
+      letter-spacing:0.16em;
     }
 
     .menu-button{
@@ -258,7 +267,7 @@
       position:fixed;
       top:0;
       right:0;
-      width:min(520px, 88vw);
+      width:min(380px, 78vw);
       height:100vh;
       background:
         radial-gradient(circle at top, rgba(214,176,107,0.07), transparent 35%),
@@ -287,14 +296,16 @@
     }
 
     .menu-list a{
-      min-height:100px;
+      min-height:78px;
       display:flex;
       align-items:center;
       justify-content:center;
       border-bottom:1px solid var(--line2);
       text-transform:uppercase;
       letter-spacing:0.14em;
-      font-size:clamp(22px, 3.5vw, 38px);
+      font-size:clamp(20px, 3vw, 30px);
+      font-family:"Cormorant Garamond", serif;
+      font-weight:600;
       color:var(--ivory);
       position:relative;
       overflow:hidden;
@@ -376,7 +387,7 @@
       width:100%;
       height:100%;
       object-fit:cover;
-      filter:brightness(0.45) saturate(1.05);
+      filter:brightness(0.72) saturate(1.1);
       transform:scale(1.03);
     }
 
@@ -385,8 +396,8 @@
       inset:0;
       z-index:-2;
       background:
-        linear-gradient(to top, rgba(8,8,9,0.94) 0%, rgba(8,8,9,0.50) 45%, rgba(8,8,9,0.30) 100%),
-        radial-gradient(circle at center, transparent 0%, rgba(8,8,9,0.3) 65%, rgba(8,8,9,0.7) 100%);
+        linear-gradient(to top, rgba(8,8,9,0.72) 0%, rgba(8,8,9,0.30) 45%, rgba(8,8,9,0.12) 100%),
+        radial-gradient(circle at center, transparent 0%, rgba(8,8,9,0.16) 65%, rgba(8,8,9,0.38) 100%);
     }
 
     .hero-shine{
