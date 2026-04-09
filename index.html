@@ -1,731 +1,295 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cat Shelter Simulator</title>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cat Shelter 2D Advanced</title>
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #fdf6ec;
-      color: #5b4636;
-    }
+<style>
+body {
+  margin:0;
+  font-family: Arial;
+  background:#f5efe6;
+}
 
-    header {
-      background: #f4a261;
-      color: white;
-      padding: 16px;
-      text-align: center;
-      font-size: 24px;
-      font-weight: bold;
-    }
+.topbar {
+  background:#e89d5b;
+  color:white;
+  padding:10px;
+  text-align:center;
+  font-weight:bold;
+}
 
-    .top-bar {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      padding: 12px;
-      background: #fff3e6;
-      border-bottom: 2px solid #f0d2b3;
-    }
+canvas {
+  display:block;
+  margin:auto;
+  background:#f7efe5;
+}
 
-    .stat-box {
-      background: white;
-      padding: 12px;
-      border-radius: 14px;
-      text-align: center;
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-      font-weight: bold;
-    }
+.ui {
+  padding:10px;
+  text-align:center;
+}
 
-    .main {
-      padding: 14px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-title {
-      font-size: 22px;
-      margin: 16px 0 10px;
-    }
-
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 18px;
-    }
-
-    button {
-      border: none;
-      border-radius: 12px;
-      padding: 10px 14px;
-      font-size: 15px;
-      cursor: pointer;
-      background: #f4a261;
-      color: white;
-      font-weight: bold;
-    }
-
-    button:hover {
-      opacity: 0.92;
-    }
-
-    button.secondary {
-      background: #8ecae6;
-    }
-
-    button.danger {
-      background: #e76f51;
-    }
-
-    button.good {
-      background: #6ab04c;
-    }
-
-    .cats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 14px;
-    }
-
-    .cat-card {
-      background: white;
-      border-radius: 18px;
-      padding: 16px;
-      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.08);
-      border: 2px solid #f6dfc8;
-    }
-
-    .cat-top {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-
-    .cat-emoji {
-      font-size: 48px;
-      width: 60px;
-      text-align: center;
-    }
-
-    .cat-name {
-      font-size: 22px;
-      font-weight: bold;
-    }
-
-    .cat-info {
-      font-size: 14px;
-      opacity: 0.85;
-    }
-
-    .bar-group {
-      margin: 10px 0;
-    }
-
-    .bar-label {
-      margin-bottom: 4px;
-      font-size: 14px;
-      font-weight: bold;
-    }
-
-    .bar {
-      width: 100%;
-      height: 12px;
-      background: #eee4d8;
-      border-radius: 999px;
-      overflow: hidden;
-    }
-
-    .fill {
-      height: 100%;
-      border-radius: 999px;
-    }
-
-    .fill.hunger { background: #f4a261; }
-    .fill.happiness { background: #ff7eb6; }
-    .fill.health { background: #6ab04c; }
-    .fill.cleanliness { background: #8ecae6; }
-
-    .cat-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 14px;
-    }
-
-    .shop {
-      background: white;
-      border-radius: 18px;
-      padding: 16px;
-      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.08);
-      margin-top: 18px;
-    }
-
-    .shop-items {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 12px;
-    }
-
-    .shop-item {
-      background: #fff8f1;
-      border: 2px solid #f3dbc5;
-      padding: 14px;
-      border-radius: 14px;
-    }
-
-    .log {
-      background: white;
-      border-radius: 18px;
-      padding: 16px;
-      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.08);
-      margin-top: 18px;
-    }
-
-    .log-box {
-      max-height: 220px;
-      overflow-y: auto;
-      background: #fffaf5;
-      border-radius: 12px;
-      padding: 12px;
-      border: 1px solid #f1dfcf;
-    }
-
-    .log-entry {
-      margin-bottom: 8px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid #eee3d7;
-      font-size: 14px;
-    }
-
-    .empty {
-      background: white;
-      border-radius: 18px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.08);
-      font-size: 18px;
-    }
-
-    footer {
-      padding: 20px;
-      text-align: center;
-      color: #7a6759;
-      font-size: 14px;
-    }
-  </style>
+button {
+  padding:10px;
+  margin:5px;
+  border:none;
+  border-radius:10px;
+  background:#e89d5b;
+  color:white;
+}
+</style>
 </head>
+
 <body>
-  <header>Cat Shelter Simulator</header>
 
-  <div class="top-bar">
-    <div class="stat-box" id="dayBox">Day: 1</div>
-    <div class="stat-box" id="moneyBox">Money: $100</div>
-    <div class="stat-box" id="repBox">Reputation: 0</div>
-    <div class="stat-box" id="capacityBox">Capacity: 3</div>
-  </div>
-
-  <div class="main">
-    <div class="section-title">Shelter Controls</div>
-    <div class="controls">
-      <button onclick="nextDay()">Next Day</button>
-      <button class="secondary" onclick="addRandomCatManual()">Rescue New Cat</button>
-      <button class="secondary" onclick="saveGame()">Save Game</button>
-      <button class="secondary" onclick="loadGame()">Load Game</button>
-      <button class="danger" onclick="resetGame()">Reset Game</button>
-    </div>
-
-    <div class="section-title">Cats in Shelter</div>
-    <div id="catsContainer" class="cats-grid"></div>
-
-    <div class="shop">
-      <div class="section-title">Upgrades</div>
-      <div class="shop-items">
-        <div class="shop-item">
-          <h3>Expand Shelter</h3>
-          <p>Increase cat capacity by 1.</p>
-          <p><strong>Cost:</strong> $80 × current level</p>
-          <button onclick="buyCapacityUpgrade()">Buy Capacity</button>
-        </div>
-
-        <div class="shop-item">
-          <h3>Better Food</h3>
-          <p>Feeding gives more hunger and happiness.</p>
-          <p><strong>Cost:</strong> $60</p>
-          <button onclick="buyFoodUpgrade()">Buy Better Food</button>
-        </div>
-
-        <div class="shop-item">
-          <h3>Medical Station</h3>
-          <p>Healing becomes stronger.</p>
-          <p><strong>Cost:</strong> $90</p>
-          <button onclick="buyMedicalUpgrade()">Buy Medical Station</button>
-        </div>
-
-        <div class="shop-item">
-          <h3>Toy Corner</h3>
-          <p>Petting gives more happiness.</p>
-          <p><strong>Cost:</strong> $70</p>
-          <button onclick="buyToyUpgrade()">Buy Toy Corner</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="log">
-      <div class="section-title">Shelter Log</div>
-      <div class="log-box" id="logBox"></div>
-    </div>
-  </div>
-
-  <footer>Made with HTML, CSS and JavaScript</footer>
-
-  <script>
-    let game = {
-      day: 1,
-      money: 100,
-      reputation: 0,
-      capacity: 3,
-      cats: [],
-      upgrades: {
-        betterFood: false,
-        medicalStation: false,
-        toyCorner: false
-      },
-      log: []
-    };
-
-    const catNames = [
-      "Milo", "Luna", "Oliver", "Bella", "Leo", "Nala",
-      "Simba", "Loki", "Coco", "Mochi", "Lily", "Chester",
-      "Kitty", "Pumpkin", "Shadow", "Ginger", "Daisy", "Toby"
-    ];
-
-    const catEmojis = ["🐱", "🐈", "😺", "😸", "🐾"];
-
-    function randomBetween(min, max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    function clamp(value, min, max) {
-      return Math.max(min, Math.min(max, value));
-    }
-
-    function addLog(text) {
-      game.log.unshift(`Day ${game.day}: ${text}`);
-      if (game.log.length > 40) {
-        game.log = game.log.slice(0, 40);
-      }
-      renderLog();
-    }
-
-    function createCat() {
-      const name = catNames[randomBetween(0, catNames.length - 1)];
-      const emoji = catEmojis[randomBetween(0, catEmojis.length - 1)];
-
-      return {
-        id: Date.now() + Math.random(),
-        name,
-        emoji,
-        hunger: randomBetween(35, 75),
-        happiness: randomBetween(30, 80),
-        health: randomBetween(40, 90),
-        cleanliness: randomBetween(25, 85)
-      };
-    }
-
-    function starterCats() {
-      game.cats = [createCat(), createCat()];
-      addLog("Your shelter opened with 2 rescue cats.");
-    }
-
-    function renderTopBar() {
-      document.getElementById("dayBox").textContent = `Day: ${game.day}`;
-      document.getElementById("moneyBox").textContent = `Money: $${game.money}`;
-      document.getElementById("repBox").textContent = `Reputation: ${game.reputation}`;
-      document.getElementById("capacityBox").textContent = `Capacity: ${game.cats.length}/${game.capacity}`;
-    }
-
-    function barHTML(label, value, className) {
-      return `
-        <div class="bar-group">
-          <div class="bar-label">${label}: ${value}</div>
-          <div class="bar">
-            <div class="fill ${className}" style="width: ${value}%"></div>
-          </div>
-        </div>
-      `;
-    }
-
-    function renderCats() {
-      const container = document.getElementById("catsContainer");
-      container.innerHTML = "";
-
-      if (game.cats.length === 0) {
-        container.innerHTML = `<div class="empty">No cats right now. Rescue a new cat to continue.</div>`;
-        return;
-      }
-
-      game.cats.forEach(cat => {
-        const adoptReady = cat.hunger >= 70 && cat.happiness >= 75 && cat.health >= 75 && cat.cleanliness >= 70;
-
-        const card = document.createElement("div");
-        card.className = "cat-card";
-        card.innerHTML = `
-          <div class="cat-top">
-            <div class="cat-emoji">${cat.emoji}</div>
-            <div>
-              <div class="cat-name">${cat.name}</div>
-              <div class="cat-info">${adoptReady ? "Ready for adoption!" : "Needs more care"}</div>
-            </div>
-          </div>
-
-          ${barHTML("Hunger", cat.hunger, "hunger")}
-          ${barHTML("Happiness", cat.happiness, "happiness")}
-          ${barHTML("Health", cat.health, "health")}
-          ${barHTML("Cleanliness", cat.cleanliness, "cleanliness")}
-
-          <div class="cat-actions">
-            <button onclick="feedCat('${cat.id}')">Feed</button>
-            <button class="secondary" onclick="cleanCat('${cat.id}')">Clean</button>
-            <button class="good" onclick="petCat('${cat.id}')">Pet</button>
-            <button class="danger" onclick="healCat('${cat.id}')">Heal</button>
-            <button onclick="tryAdoptCat('${cat.id}')">Adopt</button>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    function renderLog() {
-      const logBox = document.getElementById("logBox");
-      logBox.innerHTML = game.log.map(entry => `<div class="log-entry">${entry}</div>`).join("");
-    }
-
-    function renderGame() {
-      renderTopBar();
-      renderCats();
-      renderLog();
-    }
-
-    function findCat(id) {
-      return game.cats.find(cat => String(cat.id) === String(id));
-    }
-
-    function feedCat(id) {
-      const cat = findCat(id);
-      if (!cat) return;
-
-      const cost = 5;
-      if (game.money < cost) {
-        addLog(`Not enough money to feed ${cat.name}.`);
-        return;
-      }
-
-      game.money -= cost;
-      let hungerBoost = game.upgrades.betterFood ? 28 : 18;
-      let happinessBoost = game.upgrades.betterFood ? 8 : 4;
-
-      cat.hunger = clamp(cat.hunger + hungerBoost, 0, 100);
-      cat.happiness = clamp(cat.happiness + happinessBoost, 0, 100);
-
-      addLog(`You fed ${cat.name}.`);
-      renderGame();
-    }
-
-    function cleanCat(id) {
-      const cat = findCat(id);
-      if (!cat) return;
-
-      const cost = 4;
-      if (game.money < cost) {
-        addLog(`Not enough money to clean ${cat.name}.`);
-        return;
-      }
-
-      game.money -= cost;
-      cat.cleanliness = clamp(cat.cleanliness + 22, 0, 100);
-      cat.health = clamp(cat.health + 5, 0, 100);
-
-      addLog(`You cleaned ${cat.name}.`);
-      renderGame();
-    }
-
-    function petCat(id) {
-      const cat = findCat(id);
-      if (!cat) return;
-
-      let boost = game.upgrades.toyCorner ? 24 : 15;
-      cat.happiness = clamp(cat.happiness + boost, 0, 100);
-      cat.hunger = clamp(cat.hunger - 4, 0, 100);
-
-      addLog(`You spent time with ${cat.name}.`);
-      renderGame();
-    }
-
-    function healCat(id) {
-      const cat = findCat(id);
-      if (!cat) return;
-
-      const cost = 10;
-      if (game.money < cost) {
-        addLog(`Not enough money to heal ${cat.name}.`);
-        return;
-      }
-
-      game.money -= cost;
-      let healBoost = game.upgrades.medicalStation ? 30 : 18;
-
-      cat.health = clamp(cat.health + healBoost, 0, 100);
-      cat.happiness = clamp(cat.happiness - 3, 0, 100);
-
-      addLog(`You treated ${cat.name}.`);
-      renderGame();
-    }
-
-    function tryAdoptCat(id) {
-      const cat = findCat(id);
-      if (!cat) return;
-
-      const adoptReady = cat.hunger >= 70 && cat.happiness >= 75 && cat.health >= 75 && cat.cleanliness >= 70;
-
-      if (!adoptReady) {
-        addLog(`${cat.name} is not ready for adoption yet.`);
-        return;
-      }
-
-      const reward = randomBetween(35, 70) + Math.floor(game.reputation * 1.5);
-      game.money += reward;
-      game.reputation += 5;
-
-      game.cats = game.cats.filter(c => String(c.id) !== String(id));
-      addLog(`${cat.name} was adopted! You earned $${reward}.`);
-      maybeNewCatAfterAdoption();
-      renderGame();
-    }
-
-    function maybeNewCatAfterAdoption() {
-      if (game.cats.length < game.capacity && Math.random() < 0.45) {
-        const newCat = createCat();
-        game.cats.push(newCat);
-        addLog(`A new rescue cat named ${newCat.name} arrived.`);
-      }
-    }
-
-    function addRandomCatManual() {
-      if (game.cats.length >= game.capacity) {
-        addLog("Your shelter is full.");
-        return;
-      }
-
-      const rescueCost = 12;
-      if (game.money < rescueCost) {
-        addLog("Not enough money to rescue a new cat.");
-        return;
-      }
-
-      game.money -= rescueCost;
-      const cat = createCat();
-      game.cats.push(cat);
-      addLog(`You rescued ${cat.name}.`);
-      renderGame();
-    }
-
-    function nextDay() {
-      game.day += 1;
-
-      game.cats.forEach(cat => {
-        cat.hunger = clamp(cat.hunger - randomBetween(8, 16), 0, 100);
-        cat.happiness = clamp(cat.happiness - randomBetween(4, 12), 0, 100);
-        cat.cleanliness = clamp(cat.cleanliness - randomBetween(5, 13), 0, 100);
-
-        if (cat.hunger < 30 || cat.cleanliness < 30) {
-          cat.health = clamp(cat.health - randomBetween(5, 12), 0, 100);
-        } else {
-          cat.health = clamp(cat.health - randomBetween(0, 4), 0, 100);
-        }
-
-        if (cat.health < 25) {
-          cat.happiness = clamp(cat.happiness - 8, 0, 100);
-        }
-      });
-
-      dailyIncome();
-      randomDailyEvent();
-      removeLostCats();
-      maybeArrival();
-      renderGame();
-    }
-
-    function dailyIncome() {
-      const repIncome = Math.floor(game.reputation / 4);
-      if (repIncome > 0) {
-        game.money += repIncome;
-        addLog(`You received $${repIncome} in donations.`);
-      }
-    }
-
-    function randomDailyEvent() {
-      const roll = Math.random();
-
-      if (roll < 0.15 && game.cats.length > 0) {
-        const cat = game.cats[randomBetween(0, game.cats.length - 1)];
-        cat.happiness = clamp(cat.happiness + 12, 0, 100);
-        addLog(`${cat.name} played all day and became happier.`);
-      } else if (roll < 0.25 && game.cats.length > 0) {
-        const cat = game.cats[randomBetween(0, game.cats.length - 1)];
-        cat.health = clamp(cat.health - 10, 0, 100);
-        addLog(`${cat.name} felt a little sick today.`);
-      } else if (roll < 0.33) {
-        const bonus = randomBetween(10, 30);
-        game.money += bonus;
-        addLog(`A kind visitor donated $${bonus}.`);
-      }
-    }
-
-    function removeLostCats() {
-      const before = game.cats.length;
-      const lostCats = game.cats.filter(cat => cat.health <= 0);
-
-      lostCats.forEach(cat => {
-        addLog(`${cat.name} had to be transferred to an emergency clinic.`);
-      });
-
-      game.cats = game.cats.filter(cat => cat.health > 0);
-
-      if (before !== game.cats.length) {
-        game.reputation = Math.max(0, game.reputation - 3);
-      }
-    }
-
-    function maybeArrival() {
-      if (game.cats.length < game.capacity && Math.random() < 0.5) {
-        const cat = createCat();
-        game.cats.push(cat);
-        addLog(`A stray cat named ${cat.name} arrived at your shelter.`);
-      }
-    }
-
-    function buyCapacityUpgrade() {
-      const cost = 80 * game.capacity;
-      if (game.money < cost) {
-        addLog("Not enough money to expand shelter.");
-        return;
-      }
-
-      game.money -= cost;
-      game.capacity += 1;
-      addLog("You expanded your shelter capacity by 1.");
-      renderGame();
-    }
-
-    function buyFoodUpgrade() {
-      const cost = 60;
-      if (game.upgrades.betterFood) {
-        addLog("You already have Better Food.");
-        return;
-      }
-      if (game.money < cost) {
-        addLog("Not enough money for Better Food.");
-        return;
-      }
-
-      game.money -= cost;
-      game.upgrades.betterFood = true;
-      addLog("You bought Better Food.");
-      renderGame();
-    }
-
-    function buyMedicalUpgrade() {
-      const cost = 90;
-      if (game.upgrades.medicalStation) {
-        addLog("You already have Medical Station.");
-        return;
-      }
-      if (game.money < cost) {
-        addLog("Not enough money for Medical Station.");
-        return;
-      }
-
-      game.money -= cost;
-      game.upgrades.medicalStation = true;
-      addLog("You bought a Medical Station.");
-      renderGame();
-    }
-
-    function buyToyUpgrade() {
-      const cost = 70;
-      if (game.upgrades.toyCorner) {
-        addLog("You already have Toy Corner.");
-        return;
-      }
-      if (game.money < cost) {
-        addLog("Not enough money for Toy Corner.");
-        return;
-      }
-
-      game.money -= cost;
-      game.upgrades.toyCorner = true;
-      addLog("You built a Toy Corner.");
-      renderGame();
-    }
-
-    function saveGame() {
-      localStorage.setItem("catShelterSimulatorSave", JSON.stringify(game));
-      addLog("Game saved.");
-      renderGame();
-    }
-
-    function loadGame() {
-      const saved = localStorage.getItem("catShelterSimulatorSave");
-      if (!saved) {
-        addLog("No saved game found.");
-        renderGame();
-        return;
-      }
-
-      game = JSON.parse(saved);
-      addLog("Game loaded.");
-      renderGame();
-    }
-
-    function resetGame() {
-      localStorage.removeItem("catShelterSimulatorSave");
-      game = {
-        day: 1,
-        money: 100,
-        reputation: 0,
-        capacity: 3,
-        cats: [],
-        upgrades: {
-          betterFood: false,
-          medicalStation: false,
-          toyCorner: false
-        },
-        log: []
-      };
-      starterCats();
-      renderGame();
-    }
-
-    function initGame() {
-      const saved = localStorage.getItem("catShelterSimulatorSave");
-      if (saved) {
-        game = JSON.parse(saved);
-        addLog("Saved game loaded automatically.");
+<div class="topbar" id="top">Day 1 | $100</div>
+<canvas id="c" width="900" height="550"></canvas>
+
+<div class="ui">
+<button onclick="nextDay()">Next Day</button>
+<button onclick="spawnCat()">Rescue Cat</button>
+<button onclick="save()">Save</button>
+<button onclick="load()">Load</button>
+</div>
+
+<script>
+const canvas = document.getElementById("c");
+const ctx = canvas.getContext("2d");
+
+let game = {
+  day:1,
+  money:100,
+  cats:[],
+  selected:null,
+  draggingFood:false,
+  time:0,
+  visitors:[],
+};
+
+function rand(a,b){return Math.random()*(b-a)+a}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+
+function createCat(){
+  return {
+    x:rand(100,700),
+    y:rand(100,450),
+    vx:rand(-1,1),
+    vy:rand(-1,1),
+    size:20,
+    hunger:rand(50,80),
+    happiness:rand(50,80),
+    health:rand(50,90),
+    clean:rand(50,80),
+    name:"Cat"+Math.floor(Math.random()*1000),
+    target:null
+  }
+}
+
+function spawnCat(){
+  if(game.cats.length<6){
+    game.cats.push(createCat())
+  }
+}
+
+function drawCat(c){
+  ctx.save()
+  ctx.translate(c.x,c.y)
+
+  // body
+  ctx.fillStyle="#f2b17a"
+  ctx.beginPath()
+  ctx.arc(0,0,c.size,0,Math.PI*2)
+  ctx.fill()
+
+  // eyes
+  ctx.fillStyle="#000"
+  ctx.beginPath()
+  ctx.arc(-5,-2,2,0,6.28)
+  ctx.arc(5,-2,2,0,6.28)
+  ctx.fill()
+
+  // ears
+  ctx.beginPath()
+  ctx.moveTo(-10,-10)
+  ctx.lineTo(-5,-25)
+  ctx.lineTo(0,-10)
+  ctx.fill()
+
+  ctx.beginPath()
+  ctx.moveTo(10,-10)
+  ctx.lineTo(5,-25)
+  ctx.lineTo(0,-10)
+  ctx.fill()
+
+  ctx.restore()
+}
+
+function updateCats(){
+  game.cats.forEach(c=>{
+    if(c.target){
+      let dx=c.target.x-c.x
+      let dy=c.target.y-c.y
+      let d=Math.hypot(dx,dy)
+
+      if(d>3){
+        c.vx=dx/d
+        c.vy=dy/d
       } else {
-        starterCats();
+        c.target=null
       }
-      renderGame();
     }
 
-    initGame();
-  </script>
+    c.x+=c.vx
+    c.y+=c.vy
+
+    if(c.x<50||c.x>850)c.vx*=-1
+    if(c.y<50||c.y>500)c.vy*=-1
+
+    // decay
+    c.hunger-=0.02
+    c.happiness-=0.01
+    c.clean-=0.015
+
+    if(c.hunger<30)c.health-=0.02
+
+    c.hunger=clamp(c.hunger,0,100)
+    c.happiness=clamp(c.happiness,0,100)
+    c.health=clamp(c.health,0,100)
+    c.clean=clamp(c.clean,0,100)
+  })
+}
+
+function drawRoom(){
+  // day/night
+  let t=(Math.sin(game.time)+1)/2
+  let light=200+50*t
+  ctx.fillStyle=`rgb(${light},${light-20},${light-40})`
+  ctx.fillRect(0,0,900,550)
+
+  // zones
+  ctx.fillStyle="#ffe0b3"
+  ctx.fillRect(20,400,150,120)
+
+  ctx.fillStyle="#cceeff"
+  ctx.fillRect(700,20,150,120)
+
+  ctx.fillStyle="#d4f5d4"
+  ctx.fillRect(700,400,150,120)
+
+  ctx.fillStyle="#f7d6f0"
+  ctx.fillRect(350,20,200,100)
+}
+
+function drawVisitors(){
+  game.visitors.forEach(v=>{
+    ctx.fillStyle="#333"
+    ctx.fillRect(v.x,v.y,20,40)
+
+    v.x+=v.vx
+
+    if(v.x>900){
+      if(game.cats.length>0){
+        let cat=game.cats[0]
+        game.cats.splice(0,1)
+        game.money+=50
+      }
+      v.remove=true
+    }
+  })
+
+  game.visitors=game.visitors.filter(v=>!v.remove)
+}
+
+function spawnVisitor(){
+  game.visitors.push({
+    x:-20,
+    y:300,
+    vx:1.5
+  })
+}
+
+function drawFood(){
+  if(game.draggingFood){
+    ctx.fillStyle="#d88c4a"
+    ctx.beginPath()
+    ctx.arc(mouse.x,mouse.y,10,0,6.28)
+    ctx.fill()
+  }
+}
+
+let mouse={x:0,y:0}
+
+canvas.addEventListener("mousemove",e=>{
+  mouse.x=e.offsetX
+  mouse.y=e.offsetY
+})
+
+canvas.addEventListener("mousedown",()=>{
+  game.draggingFood=true
+})
+
+canvas.addEventListener("mouseup",()=>{
+  if(game.draggingFood){
+    game.cats.forEach(c=>{
+      let d=Math.hypot(c.x-mouse.x,c.y-mouse.y)
+      if(d<60){
+        c.hunger+=30
+        c.target={x:mouse.x,y:mouse.y}
+      }
+    })
+  }
+  game.draggingFood=false
+})
+
+canvas.addEventListener("click",e=>{
+  game.cats.forEach(c=>{
+    let d=Math.hypot(c.x-e.offsetX,c.y-e.offsetY)
+    if(d<25){
+      game.selected=c
+    }
+  })
+})
+
+function drawUI(){
+  document.getElementById("top").innerText=
+  `Day ${game.day} | $${game.money} | Cats:${game.cats.length}`
+}
+
+function nextDay(){
+  game.day++
+  spawnVisitor()
+}
+
+function save(){
+  localStorage.setItem("catgame",JSON.stringify(game))
+}
+
+function load(){
+  let s=localStorage.getItem("catgame")
+  if(s)game=JSON.parse(s)
+}
+
+function loop(){
+  game.time+=0.01
+
+  drawRoom()
+  updateCats()
+
+  game.cats.forEach(drawCat)
+  drawVisitors()
+  drawFood()
+
+  drawUI()
+
+  requestAnimationFrame(loop)
+}
+
+spawnCat()
+spawnCat()
+loop()
+</script>
+
 </body>
 </html>
